@@ -3,43 +3,36 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Répertoire de hadiths</title>
-
+<title>Répertoire de hadiths — MB</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
-
 <style>
 :root{
   --bg:#0b1220; --card:#0f172a; --muted:#9aa3b2; --text:#e5e7eb; --bd:#1f2a44;
-  --acc:#4f8cff; --ok:#17b26a; --warn:#f59e0b; --chip:#112447; --shadow:0 14px 40px rgba(0,0,0,.35);
+  --acc:#4f8cff; --ok:#17b26a; --chip:#112447; --shadow:0 14px 40px rgba(0,0,0,.35);
 }
 :root.light{
   --bg:#f5f7fb; --card:#ffffff; --text:#0f172a; --muted:#5b6474; --bd:#e5eaf3; --chip:#eef3ff; --shadow:0 8px 24px rgba(0,0,0,.08);
 }
 *{box-sizing:border-box}
-html,body{margin:0;height:100%}
+html,body{margin:0}
 body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial}
-a{color:inherit}
-button,input,select{font-family:inherit}
 .container{max-width:1100px;margin:0 auto;padding:18px}
 
 /* Header */
 .header{position:sticky;top:0;z-index:30;background:linear-gradient(180deg,rgba(11,18,32,.85),rgba(11,18,32,.65));backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid var(--bd)}
 :root.light .header{background:linear-gradient(180deg,rgba(245,247,251,.85),rgba(245,247,251,.70))}
+.header-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px}
 .brand{display:flex;align-items:center;gap:12px;font-weight:800}
 .logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#6aa3ff,#2b5cff);box-shadow:inset 0 0 0 2px #1e3a8a66}
-.header-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 18px}
 .actions{display:flex;gap:8px;align-items:center}
+.btn{border:1px solid var(--bd);background:var(--card);color:var(--text);padding:10px 12px;border-radius:12px;cursor:pointer;font-weight:800}
+.btn.flat{background:var(--chip);border-color:transparent}
+.btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
 
 /* Controls */
-.controls{display:grid;grid-template-columns:1fr;gap:10px;padding:12px 18px 18px}
-@media(min-width:720px){.controls{grid-template-columns:1.2fr .8fr .8fr .8fr auto auto}}
-.inp,.sel,.btn{border:1px solid var(--bd);background:var(--card);color:var(--text);padding:12px 12px;border-radius:12px}
-.inp{width:100%}
-.sel{width:100%}
-.btn{cursor:pointer;font-weight:800}
-.btn.primary{background:var(--acc);border-color:var(--acc);color:#fff}
-.btn.ghost{background:transparent}
-.btn.flat{background:var(--chip);border-color:transparent}
+.controls{display:grid;grid-template-columns:1fr;gap:10px;padding:8px 18px 18px}
+@media(min-width:720px){.controls{grid-template-columns:1.2fr .8fr .8fr .8fr auto auto auto}}
+.inp,.sel{border:1px solid var(--bd);background:var(--card);color:var(--text);padding:12px 12px;border-radius:12px;width:100%}
 .badge{font-size:12px;padding:5px 8px;border-radius:999px;background:var(--chip);border:1px solid #25407c45}
 
 /* Stats */
@@ -50,13 +43,13 @@ button,input,select{font-family:inherit}
 /* Grid */
 .grid{display:grid;grid-template-columns:1fr;gap:12px;padding:0 18px 24px}
 @media(min-width:760px){.grid{grid-template-columns:1fr 1fr}}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;box-shadow:var(--shadow);cursor:pointer}
 .card h3{margin:0 0 6px;font-size:16px}
 .meta{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}
 .tag{font-size:12px;background:var(--chip);border:1px solid var(--bd);padding:4px 8px;border-radius:999px}
 .ar{font-family:Amiri,serif;direction:rtl;font-size:20px;line-height:1.7;margin:8px 0}
 .tr{background:rgba(68,97,166,.14);border:1px dashed #2b5cff33;padding:10px;border-radius:12px}
-.fav{float:right}
+.hl{background:#2b5cff33;padding:0 2px;border-radius:4px}
 .empty{opacity:.7;text-align:center;padding:20px}
 
 /* Pagination */
@@ -73,13 +66,10 @@ button,input,select{font-family:inherit}
 
 /* Print */
 @media print{
-  .header,.controls,.pager,.actions,.fav{display:none}
+  .header,.controls,.pager{display:none}
   body{background:#fff;color:#111}
   .card{break-inside:avoid;border:1px solid #ddd}
 }
-
-/* Tiny helpers */
-.row{display:flex;gap:8px;flex-wrap:wrap}
 </style>
 </head>
 <body>
@@ -89,6 +79,8 @@ button,input,select{font-family:inherit}
   <div class="header-row container">
     <div class="brand"><div class="logo"></div><div>Répertoire de hadiths</div></div>
     <div class="actions">
+      <button class="btn flat" id="btnRandom" title="Un hadith au hasard">🎲</button>
+      <button class="btn flat" id="btnDaily" title="Hadith du jour">📅</button>
       <button class="btn flat" id="btnFavs">⭐ Favoris</button>
       <button class="btn" id="btnAll">Tous</button>
       <button class="btn" id="btnTheme">🌙/☀️</button>
@@ -103,9 +95,10 @@ button,input,select{font-family:inherit}
     <select id="fTopic" class="sel"><option value="">— Tous thèmes —</option></select>
     <select id="fNarr" class="sel"><option value="">— Tous rapporteurs —</option></select>
     <button id="btnExport" class="btn">Exporter</button>
-    <label class="btn ghost" style="display:flex;align-items:center;gap:8px;cursor:pointer">
+    <label class="btn" style="display:flex;align-items:center;gap:8px;cursor:pointer">
       <input type="file" id="fileImport" accept="application/json" hidden> Importer
     </label>
+    <button id="btnLoadJson" class="btn">Charger URL</button>
   </div>
 
   <!-- Stats -->
@@ -128,7 +121,7 @@ button,input,select{font-family:inherit}
   <div class="modal">
     <header>
       <h3 id="mTitle" style="margin:0"></h3>
-      <div class="row">
+      <div class="actions">
         <button id="mFav" class="btn flat">☆</button>
         <button id="mClose" class="close">✕</button>
       </div>
@@ -136,40 +129,42 @@ button,input,select{font-family:inherit}
     <div class="meta" id="mMeta"></div>
     <div class="ar" id="mAr"></div>
     <div class="tr" id="mTr"></div>
-    <div class="row" id="mRefs" style="margin-top:8px"></div>
+    <div class="meta" id="mRefs"></div>
   </div>
 </div>
 
 <script>
-/* ========== Données démo (remplace-les ou importe un JSON) ========== */
-const SAMPLE = [
-  { id:"bukhari-1", book:"Sahih al-Bukhari", number:"1", arabic:"إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ …", translation:"Les actes ne valent que par leurs intentions…", narrator:"Umar ibn al-Khattab", topic:"Intention", refs:["Bukhari 1"] },
-  { id:"muslim-1",  book:"Sahih Muslim",     number:"1", arabic:"الدِّينُ النَّصِيحَةُ …",            translation:"La religion est le conseil…",                narrator:"Tamim ad-Dari",        topic:"Conseil",   refs:["Muslim 55"] },
-  { id:"tirmidhi-1",book:"Jami' at-Tirmidhi", number:"1924", arabic:"الرَّاحِمُونَ يَرْحَمُهُمُ الرَّحْمَٰنُ …", translation:"Les miséricordieux, le Miséricordieux leur fera miséricorde…", narrator:"Abdullah ibn Amr", topic:"Miséricorde", refs:["Tirmidhi 1924"] },
-  { id:"nawawi-3",  book:"Arba'in an-Nawawi", number:"3", arabic:"بُنِيَ الإِسْلَامُ عَلَى خَمْسٍ …", translation:"L’islam est bâti sur cinq…", narrator:"Ibn Umar", topic:"Piliers", refs:["Nawawi #3"] }
-];
-
-/* ========== Persistence locale ========== */
-const KEY="hadith_repo_ui_v2";
-let DB = load() || { items:SAMPLE, favs:{}, theme:"dark" };
-
+/* ========== Persistence ========== */
+const KEY="hadith_repo_ui_v3";
+let DB = load() || { items:[], favs:{}, theme:"dark" };
 function save(){ localStorage.setItem(KEY, JSON.stringify(DB)); }
 function load(){ try{ return JSON.parse(localStorage.getItem(KEY)||"null"); }catch{ return null; } }
 
-/* ========== Éléments ========== */
+/* ========== Elements ========== */
 const $ = s => document.querySelector(s);
 const listEl = $('#list'), emptyEl = $('#empty'), pagerEl = $('#pager');
 const sTotal=$('#sTotal'), sCount=$('#sCount'), sFavs=$('#sFavs');
 const q=$('#q'), fBook=$('#fBook'), fTopic=$('#fTopic'), fNarr=$('#fNarr');
 const btnFavs=$('#btnFavs'), btnAll=$('#btnAll'), btnPrint=$('#btnPrint'), btnTheme=$('#btnTheme');
+const btnRandom=$('#btnRandom'), btnDaily=$('#btnDaily');
 
 /* ========== Thème ========== */
 applyTheme(DB.theme||'dark');
 btnTheme.onclick=()=>{ DB.theme = (DB.theme==='light'?'dark':'light'); applyTheme(DB.theme); save(); };
 function applyTheme(mode){ document.documentElement.classList.toggle('light', mode==='light'); }
 
+/* ========== Outils ========== */
+function uniq(arr){ return [...new Set(arr.filter(Boolean))].sort(); }
+function highlight(text, term){
+  if(!term) return text;
+  try{
+    const esc = term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    return text.replace(new RegExp(esc,'gi'), m=>`<span class="hl">${m}</span>`);
+  }catch{ return text; }
+}
+
 /* ========== Filtres dynamiques ========== */
-function fill(sel, arr){ sel.length=1; [...new Set(arr.filter(Boolean))].sort().forEach(v=>{ const o=document.createElement('option');o.value=v;o.textContent=v;sel.appendChild(o); }); }
+function fill(sel, arr){ sel.length=1; uniq(arr).forEach(v=>{ const o=document.createElement('option');o.value=v;o.textContent=v;sel.appendChild(o); }); }
 function refreshFilters(){
   const items=DB.items;
   fill(fBook, items.map(x=>x.book));
@@ -178,9 +173,9 @@ function refreshFilters(){
 }
 
 /* ========== Recherche + Pagination ========== */
-let onlyFavs=false, page=1, perPage=8, currentList=[];
+let onlyFavs=false, page=1, perPage=8, currentList=[], currentTerm="";
 function filterItems(){
-  const term=(q.value||"").toLowerCase().trim();
+  const term=(q.value||"").toLowerCase().trim(); currentTerm = term;
   const book=fBook.value, topic=fTopic.value, narr=fNarr.value;
   let out = DB.items.filter(h=>{
     if(onlyFavs && !DB.favs[h.id]) return false;
@@ -188,7 +183,7 @@ function filterItems(){
     if(topic && h.topic!==topic) return false;
     if(narr && h.narrator!==narr) return false;
     if(term){
-      const hay=(h.translation+" "+(h.arabic||"")+" "+h.book+" "+(h.narrator||"")+" "+(h.refs||[]).join(" ")).toLowerCase();
+      const hay=( (h.translation||"")+" "+(h.arabic||"")+" "+(h.book||"")+" "+(h.narrator||"")+" "+(h.refs||[]).join(" ") ).toLowerCase();
       return hay.includes(term);
     }
     return true;
@@ -210,34 +205,32 @@ function render(){
   listEl.innerHTML='';
   slice.forEach(h=>{
     const card=document.createElement('div');card.className='card';
-    const fav=document.createElement('button');fav.className='btn flat fav'; fav.textContent = DB.favs[h.id] ? '⭐' : '☆';
-    fav.onclick=()=>{ DB.favs[h.id]=!DB.favs[h.id]; save(); render(); };
+    const fav=document.createElement('button');fav.className='btn flat'; fav.textContent = DB.favs[h.id] ? '⭐' : '☆';
+    fav.onclick=(e)=>{ e.stopPropagation(); DB.favs[h.id]=!DB.favs[h.id]; save(); render(); };
 
     const title=document.createElement('h3');
-    title.innerHTML = `<span>${h.book}${h.number?(" #"+h.number):""}</span>`;
+    title.innerHTML = `<span>${h.book||'—'}${h.number?(" #"+h.number):""}</span>`;
     title.appendChild(fav);
 
     const meta=document.createElement('div'); meta.className='meta';
     meta.innerHTML = `
       <span class="tag">${h.topic||'—'}</span>
       <span class="tag">${h.narrator||'—'}</span>
-      <span class="tag">${h.id}</span>
+      <span class="tag">${h.id||''}</span>
     `;
 
-    const ar = h.arabic ? `<div class="ar">${h.arabic}</div>` : '';
-    const tr = `<div class="tr">${h.translation||''}</div>`;
+    const arHTML = h.arabic ? `<div class="ar">${h.arabic}</div>` : '';
+    const trHTML = `<div class="tr">${highlight(h.translation||'', currentTerm)}</div>`;
     const refs = (h.refs||[]).map(r=>`<span class="badge">${r}</span>`).join(' ');
 
     card.innerHTML = '';
     card.appendChild(title);
     card.appendChild(meta);
     if(h.arabic){ const d=document.createElement('div'); d.className='ar'; d.innerHTML=h.arabic; card.appendChild(d); }
-    const t=document.createElement('div'); t.className='tr'; t.innerHTML=h.translation||''; card.appendChild(t);
-    const rr=document.createElement('div'); rr.className='row'; rr.innerHTML = refs; card.appendChild(rr);
+    const t=document.createElement('div'); t.className='tr'; t.innerHTML=trHTML; card.appendChild(t);
+    const rr=document.createElement('div'); rr.className='meta'; rr.innerHTML = refs; card.appendChild(rr);
 
-    card.style.cursor='pointer';
-    card.onclick = (e)=>{ if(e.target===fav) return; openModal(h); };
-
+    card.onclick = ()=> openModal(h);
     listEl.appendChild(card);
   });
 
@@ -258,8 +251,8 @@ const mb=$('#mb'), mTitle=$('#mTitle'), mMeta=$('#mMeta'), mAr=$('#mAr'), mTr=$(
 let modalHadith=null;
 function openModal(h){
   modalHadith=h;
-  mTitle.textContent = `${h.book}${h.number?(" #"+h.number):""}`;
-  mMeta.innerHTML = `<span class="tag">${h.topic||'—'}</span> <span class="tag">${h.narrator||'—'}</span> <span class="tag">${h.id}</span>`;
+  mTitle.textContent = `${h.book||'—'}${h.number?(" #"+h.number):""}`;
+  mMeta.innerHTML = `<span class="tag">${h.topic||'—'}</span> <span class="tag">${h.narrator||'—'}</span> <span class="tag">${h.id||''}</span>`;
   mAr.textContent = h.arabic||'';
   mAr.style.display = h.arabic?'block':'none';
   mTr.textContent = h.translation||'';
@@ -271,7 +264,7 @@ mClose.onclick=()=> mb.style.display='none';
 mb.addEventListener('click',e=>{ if(e.target===mb) mb.style.display='none';});
 mFav.onclick=()=>{ if(!modalHadith) return; const id=modalHadith.id; DB.favs[id]=!DB.favs[id]; save(); mFav.textContent = DB.favs[id] ? '⭐' : '☆'; render(); };
 
-/* ========== IO (export/import/print) ========== */
+/* ========== IO ========== */
 $('#btnExport').onclick=()=>{
   const blob=new Blob([JSON.stringify(DB,null,2)],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='hadiths.json'; a.click(); URL.revokeObjectURL(a.href);
@@ -286,16 +279,39 @@ $('#fileImport').onchange=async e=>{
     alert("Import réussi ✅");
   }catch(err){ alert("Erreur import: "+(err?.message||err)); }
 };
+document.getElementById('btnLoadJson').onclick=async ()=>{
+  const url = prompt("URL d'un hadiths.json (ex: https://ton-site/hadiths.json) :","");
+  if(!url) return;
+  try{
+    const res = await fetch(url); const data = await res.json();
+    DB.items = Array.isArray(data) ? data : (data.items || []);
+    DB.favs = data.favs || {};
+    save(); refreshFilters(); page=1; render();
+    alert("Chargé depuis l’URL ✅");
+  }catch(err){ alert("Erreur chargement URL: "+(err?.message||err)); }
+};
 btnPrint.onclick=()=>window.print();
 
 /* ========== Réactivité ========== */
 [q,fBook,fTopic,fNarr].forEach(el=> el.addEventListener('input', ()=>{ page=1; render(); }));
 btnFavs.onclick=()=>{ onlyFavs=true; page=1; render(); };
 btnAll.onclick=()=>{ onlyFavs=false; page=1; render(); };
+btnRandom.onclick=()=>{ if(!DB.items.length) return; const h=DB.items[Math.floor(Math.random()*DB.items.length)]; openModal(h); };
+btnDaily.onclick=()=>{ if(!DB.items.length) return; const d=new Date(); const idx=(d.getFullYear()*10000 + (d.getMonth()+1)*100 + d.getDate()) % DB.items.length; openModal(DB.items[idx]); };
 
 /* ========== Boot ========== */
-refreshFilters();
-render();
+/* Si aucune donnée locale, charge un petit échantillon pour démarrer */
+(async function boot(){
+  if(!DB.items.length){
+    DB.items = [
+      { id:"bukhari-1", book:"Sahih al-Bukhari", number:"1", arabic:"", translation:"Les actes ne valent que par leurs intentions. (démo)", narrator:"Umar ibn al-Khattab", topic:"Intention", refs:["Bukhari 1"] },
+      { id:"muslim-1",  book:"Sahih Muslim",     number:"1", arabic:"", translation:"La religion est le conseil. (démo)",                narrator:"Tamim ad-Dari",        topic:"Conseil",   refs:["Muslim 55"] }
+    ];
+    save();
+  }
+  refreshFilters();
+  render();
+})();
 </script>
 
 </body>
